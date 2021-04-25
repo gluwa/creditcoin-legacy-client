@@ -14,12 +14,12 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.4" />
-    <PackageReference Include="cccore" Version="*" />
-    <PackageReference Include="ccplugin" Version="*" />
-    <PackageReference Include="cbitcoin" Version="*" />
-    <PackageReference Include="cerc20" Version="*" />
-    <PackageReference Include="cethereum" Version="*" />
-    <PackageReference Include="cethless" Version="*" />
+    <PackageReference Include="cccore" Version="*-*" />
+    <PackageReference Include="ccplugin" Version="*-*" />
+    <PackageReference Include="cbitcoin" Version="*-*" />
+    <PackageReference Include="cerc20" Version="*-*" />
+    <PackageReference Include="cethereum" Version="*-*" />
+    <PackageReference Include="cethless" Version="*-*" />
   </ItemGroup>
 
   <ItemGroup>
