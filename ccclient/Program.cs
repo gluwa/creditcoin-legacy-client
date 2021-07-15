@@ -171,6 +171,7 @@ namespace ccclient
             string creditcoinRestApiURL = config["creditcoinRestApiURL"];
             string creditcoinUrl = string.IsNullOrWhiteSpace(creditcoinRestApiURL) ? "http://localhost:8008" : creditcoinRestApiURL;
             HttpClient httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromMinutes(10);
 
             string progressToken = null;
             string pluginProgress = Path.Combine(pluginFolder, $"plugin_progress{progressId}.txt");
