@@ -1,0 +1,38 @@
+name: container
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+
+jobs:
+  sanity:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        dotnet-version: [3.1.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+
+    - name: Compile binaries
+      run: |
+        dotnet restore
+        dotnet build
+        dotnet test
+
+    - name: Build container image
+      run: |
+        docker build -t gluwa/container-under-test ccclient/
+
+    - name: Execute container image
+      run: |
+        docker run -d --rm --name container-under-test gluwa/container-under-test
+
+    - name: Verify healthcheck
+      run: |
+        docker inspect -f '{{.State.Health.Status}}' container-under-test
