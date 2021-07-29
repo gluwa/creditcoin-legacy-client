@@ -34,23 +34,16 @@
     </None>
   </ItemGroup>
 
-  <Target Name="MakeMyDir" AfterTargets="Build">
-    <MakeDir Directories="$(OutDir)plugins" />
-  </Target>
-
-  <Target Name="MakeMyDir" AfterTargets="Publish">
-    <MakeDir Directories="$(OutDir)plugins" />
-  </Target>
-
   <ItemGroup>
     <MySourceFiles Include="$(OutDir)cbitcoin.dll;$(OutDir)cccore.dll;$(OutDir)ccplugin.dll;$(OutDir)cerc20.dll;$(OutDir)cethereum.dll;$(OutDir)cethless.dll" />
   </ItemGroup>
 
-  <Target Name="CopyFiles" AfterTargets="Build">
-    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)plugins" />
+  <Target Name="MakeMyDir" AfterTargets="Build;Publish">
+    <MakeDir Directories="$(OutDir)plugins" />
+    <MakeDir Directories="$(PublishDir)plugins" />
   </Target>
-
-  <Target Name="CopyFiles" AfterTargets="Publish">
+  <Target Name="CopyFiles" AfterTargets="Build;Publish">
+    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutDir)plugins" />
     <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(PublishDir)plugins" />
   </Target>
 
