@@ -117,6 +117,7 @@ namespace ccclient
                 Console.WriteLine("creditcoin CompleteRepaymentOrder repaymentOrderId");
                 Console.WriteLine("creditcoin CloseRepaymentOrder repaymentOrderId transferId");
                 Console.WriteLine("creditcoin CollectCoins ethereumAddress amount txId");
+                Console.WriteLine("creditcoin RegisterDealOrder askAddressId bidAddressId amount interest maturity fee expiration fundraiserSignature fundraiserPublicKey dealOrderId txId");
                 Console.WriteLine("bitcoin RegisterTransfer gain dealOrderId|repaymentOrderId sourceTxId");
                 Console.WriteLine("ethereum RegisterTransfer gain dealOrderId|repaymentOrderId");
                 Console.WriteLine("erc20 RegisterTransfer gain dealOrderId|repaymentOrderId");
