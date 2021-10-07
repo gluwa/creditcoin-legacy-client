@@ -8,7 +8,7 @@ on:
 
 jobs:
   sanity:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         dotnet-version: [3.1.x]
@@ -21,18 +21,21 @@ jobs:
 
     - name: Compile binaries
       run: |
-        dotnet restore
-        dotnet build
-        dotnet test
+        dotnet restore 
+        dotnet build ./ccclient/ccclient.csproj -r ubuntu-x64
+        dotnet test -r ubuntu-x64
 
     - name: Build container image
       run: |
-        docker build -t gluwa/container-under-test ccclient/
+        docker build -t gluwa/container-under-test ccclient/bin/Debug/netcoreapp3.1/ubuntu-x64/
 
-    - name: Execute container image
+    - name: Run container and wait until healthy
       run: |
-        docker run -d --rm --name container-under-test gluwa/container-under-test
+        docker run -t --name container-under-test gluwa/container-under-test tail > /dev/null &
+        sleep 10
+        while [ "`docker inspect -f {{.State.Health.Status}} container-under-test`" != "healthy" ]; do     sleep 2; done
 
-    - name: Verify healthcheck
+    - name: Kill and remove container
       run: |
-        docker inspect -f '{{.State.Health.Status}}' container-under-test
+        docker kill container-under-test
+        docker rm -f container-under-test
