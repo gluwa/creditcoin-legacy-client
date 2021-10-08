@@ -10,7 +10,7 @@ using System.Net.Http;
 
 namespace ccclient
 {
-    class Program
+    static class Program
     {
         private const string configParamPrefix = "-config:";
         private const string progressParamPrefix = "-progress:";
@@ -20,26 +20,16 @@ namespace ccclient
         static void Main(string[] args)
         {
             string root = Directory.GetCurrentDirectory();
-            string pluginFolder;
-
-            if (args.Length > 0 && args[0].StartsWith(pluginsParamPrefix))
-            {
-                pluginFolder = args[0].Substring(pluginsParamPrefix.Length);
-                args = args.Skip(1).ToArray();
-            }
-            else
-            {
-                pluginFolder = TxBuilder.GetPluginsFolder(root);
-            }
+            string pluginFolder = getPluginFolder(args, root);
 
             if (pluginFolder == null)
             {
-                Console.WriteLine("The 'plugins' subfolder not found");
+                Console.WriteLine("The 'plugins' subfolder was not found");
                 args = new string[0];
             }
             if (!Directory.Exists(pluginFolder))
             {
-                Console.Error.WriteLine("The plugin dir " + pluginFolder + " doesn't exist.");
+                Console.Error.WriteLine("The plugin folder '" + pluginFolder + "' was not found.");
             }
 
             string progressId = "";
@@ -159,7 +149,6 @@ namespace ccclient
             builder = builder
                 .AddJsonFile("appsettings.dev.json", true, false);
 #endif
-            ;
 
             if (configFile != null)
             {
@@ -169,7 +158,9 @@ namespace ccclient
             IConfiguration config = builder.Build();
 
             string creditcoinRestApiURL = config["creditcoinRestApiURL"];
+#pragma warning disable S1075 // URIs should not be hardcoded    
             string creditcoinUrl = string.IsNullOrWhiteSpace(creditcoinRestApiURL) ? "http://localhost:8008" : creditcoinRestApiURL;
+#pragma warning restore S1075 // URIs should not be hardcoded
             HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromMinutes(10);
 
@@ -187,7 +178,7 @@ namespace ccclient
             Debug.Assert(output == null && link != null || link == null);
             if (output == null)
             {
-                for (; ; )
+                while (true)
                 {
                     System.Threading.Thread.Sleep(500);
                     var msg = cccore.Core.Run(httpClient, creditcoinUrl, link, txid);
@@ -215,6 +206,22 @@ namespace ccclient
             {
                 File.WriteAllText(pluginProgress, progressToken);
             }
+        }
+        static string getPluginFolder(string[] args, string root)
+        {
+            string pluginFolder;
+
+            if (args.Length > 0 && args[0].StartsWith(pluginsParamPrefix))
+            {
+                pluginFolder = args[0].Substring(pluginsParamPrefix.Length);
+                args = args.Skip(1).ToArray();
+            }
+            else
+            {
+                pluginFolder = TxBuilder.GetPluginsFolder(root);
+            }
+
+            return pluginFolder;
         }
     }
 }
