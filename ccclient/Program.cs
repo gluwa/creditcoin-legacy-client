@@ -20,7 +20,17 @@ namespace ccclient
         static void Main(string[] args)
         {
             string root = Directory.GetCurrentDirectory();
-            string pluginFolder = getPluginFolder(args, root);
+            string pluginFolder;
+
+            if (args.Length > 0 && args[0].StartsWith(pluginsParamPrefix))
+            {
+                pluginFolder = args[0].Substring(pluginsParamPrefix.Length);
+                args = args.Skip(1).ToArray();
+            }
+            else
+            {
+                pluginFolder = TxBuilder.GetPluginsFolder(root);
+            }
 
             if (pluginFolder == null)
             {
@@ -206,22 +216,6 @@ namespace ccclient
             {
                 File.WriteAllText(pluginProgress, progressToken);
             }
-        }
-        static string getPluginFolder(string[] args, string root)
-        {
-            string pluginFolder;
-
-            if (args.Length > 0 && args[0].StartsWith(pluginsParamPrefix))
-            {
-                pluginFolder = args[0].Substring(pluginsParamPrefix.Length);
-                args = args.Skip(1).ToArray();
-            }
-            else
-            {
-                pluginFolder = TxBuilder.GetPluginsFolder(root);
-            }
-
-            return pluginFolder;
         }
     }
 }
