@@ -34,7 +34,7 @@ namespace ccclient
 
             if (pluginFolder == null)
             {
-                Console.WriteLine("The 'plugins' subfolder was not found");
+                Console.Error.WriteLine("The 'plugins' subfolder was not found");
                 args = new string[0];
             }
             if (!Directory.Exists(pluginFolder))
@@ -135,7 +135,7 @@ namespace ccclient
                     configFile = Path.Combine(pluginFolder, configFile);
                     if (!File.Exists(configFile))
                     {
-                        Console.WriteLine("Cannot find the specified config file");
+                        Console.Error.WriteLine("Cannot find the specified config file");
                         return;
                     }
                 }
@@ -149,7 +149,7 @@ namespace ccclient
 
             if (args.Length < 1)
             {
-                Console.WriteLine("Command is not provided");
+                Console.Error.WriteLine("Command is not provided");
                 return;
             }
 
