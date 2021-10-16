@@ -1,17 +1,18 @@
-FROM ubuntu:20.04
+FROM mcr.microsoft.com/dotnet/sdk:3.1-focal AS build-env
+WORKDIR /app
 
-WORKDIR /home/Creditcoin/Client
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
 
-COPY . /home/Creditcoin/Client/
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o app-out
 
-RUN apt-get update
-RUN apt-get install -y software-properties-common
-RUN add-apt-repository universe
-RUN apt-get install -y wget apt-transport-https
-RUN wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-RUN dpkg -i packages-microsoft-prod.deb
-RUN rm packages-microsoft-prod.deb
-RUN apt-get update
-RUN apt-get install -y dotnet-runtime-3.1
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/sdk:3.1-focal
+WORKDIR /home/Creditcoin/Client/
+
+COPY --from=build-env /app/app-out /home/Creditcoin/Client/
 
 HEALTHCHECK CMD ./ccclient
