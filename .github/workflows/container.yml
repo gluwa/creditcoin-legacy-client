@@ -1,37 +1,40 @@
-name: container
+name: .NET
+
 on:
   push:
-    branches:
-      - main
-      - dev
+    branches: [ dev, main ]
   pull_request:
+    branches: [ dev ]
 
 jobs:
-  sanity:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        dotnet-version: [3.1.x]
+  build:
+
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-dotnet@v1
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet-version: 3.1.x
 
-    - name: Compile binaries
-      run: |
-        dotnet restore 
-        dotnet build ./ccclient/ccclient.csproj -r ubuntu-x64
-        dotnet test -r ubuntu-x64
+    - name: Restore dependencies
+      run: dotnet restore
 
-    - name: Build container image
-      run: |
-        docker build -t gluwa/container-under-test ccclient/bin/Debug/netcoreapp3.1/ubuntu-x64/
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+    - name: Docker Build
+      run: docker build ./ccclient -t gluwa/container-under-test
 
     - name: Run container and wait until healthy
       run: |
         docker run -t --name container-under-test gluwa/container-under-test tail > /dev/null &
+        sleep 15
         COUNT=0
         while [ "`docker inspect -f {{.State.Health.Status}} container-under-test`" != "healthy" ] && [ $COUNT -lt 20 ]; do COUNT=$((COUNT+1)); echo "Checking health status - Attempt $COUNT of 20"; sleep 15; done
         if [ $COUNT -ge 20 ]; then echo "Error - Failed to verify healthcheck after 5 minutes"; exit 1; else echo "Successfully verified healthcheck!"; fi
