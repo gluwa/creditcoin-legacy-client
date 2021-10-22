@@ -97,14 +97,14 @@ namespace ccclient
                 Console.WriteLine("show CurrentOffers sighash|0");
                 Console.WriteLine("show CreditHistory sighash|0");
                 Console.WriteLine("show NewDeals sighash|0");
-                Console.WriteLine("show Transfer sighash|0 orderId");
+                Console.WriteLine("show Transfer sighash|0 dealOrderId");
                 Console.WriteLine("show CurrentLoans sighash|0");
                 Console.WriteLine("show LockedLoans sighash|0");
                 Console.WriteLine("show NewRepaymentOrders sighash|0");
                 Console.WriteLine("show CurrentRepaymentOrders sighash|0");
                 Console.WriteLine("creditcoin SendFunds amount sighash");
                 Console.WriteLine("creditcoin RegisterAddress blockchain address network");
-                Console.WriteLine("creditcoin RegisterTransfer gain orderId txId");
+                Console.WriteLine("creditcoin RegisterTransfer gain dealOrderId txId");
                 Console.WriteLine("creditcoin AddAskOrder addressId amount interest maturity fee expiration");
                 Console.WriteLine("creditcoin AddBidOrder addressId amount interest maturity fee expiration");
                 Console.WriteLine("creditcoin AddOffer askOrderId bidOrderId expiration");
