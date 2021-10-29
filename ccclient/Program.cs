@@ -97,14 +97,14 @@ namespace ccclient
                 Console.WriteLine("show CurrentOffers sighash|0");
                 Console.WriteLine("show CreditHistory sighash|0");
                 Console.WriteLine("show NewDeals sighash|0");
-                Console.WriteLine("show Transfer sighash|0 orderId");
+                Console.WriteLine("show Transfer sighash|0 dealOrderId");
                 Console.WriteLine("show CurrentLoans sighash|0");
                 Console.WriteLine("show LockedLoans sighash|0");
                 Console.WriteLine("show NewRepaymentOrders sighash|0");
                 Console.WriteLine("show CurrentRepaymentOrders sighash|0");
                 Console.WriteLine("creditcoin SendFunds amount sighash");
                 Console.WriteLine("creditcoin RegisterAddress blockchain address network");
-                Console.WriteLine("creditcoin RegisterTransfer gain orderId txId");
+                Console.WriteLine("creditcoin RegisterTransfer gain transferId txId");
                 Console.WriteLine("creditcoin AddAskOrder addressId amount interest maturity fee expiration");
                 Console.WriteLine("creditcoin AddBidOrder addressId amount interest maturity fee expiration");
                 Console.WriteLine("creditcoin AddOffer askOrderId bidOrderId expiration");
@@ -117,10 +117,10 @@ namespace ccclient
                 Console.WriteLine("creditcoin CompleteRepaymentOrder repaymentOrderId");
                 Console.WriteLine("creditcoin CloseRepaymentOrder repaymentOrderId transferId");
                 Console.WriteLine("creditcoin CollectCoins ethereumAddress amount txId");
-                Console.WriteLine("bitcoin RegisterTransfer gain orderId sourceTxId");
-                Console.WriteLine("ethereum RegisterTransfer gain orderId");
-                Console.WriteLine("erc20 RegisterTransfer gain orderId");
-                Console.WriteLine("ethless RegisterTransfer gain orderId fee sig-base64");
+                Console.WriteLine("bitcoin RegisterTransfer gain dealOrderId|repaymentOrderId sourceTxId");
+                Console.WriteLine("ethereum RegisterTransfer gain dealOrderId|repaymentOrderId");
+                Console.WriteLine("erc20 RegisterTransfer gain dealOrderId|repaymentOrderId");
+                Console.WriteLine("ethless RegisterTransfer gain dealOrderId|repaymentOrderId fee sig-base64");
                 Console.WriteLine("ethereum CollectCoins amount");
                 return;
             }
